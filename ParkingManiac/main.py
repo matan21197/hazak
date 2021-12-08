@@ -4,6 +4,8 @@ import os
 from threading import Lock
 import datetime
 import json
+import cv2
+import numpy as np
 
 from models.models import db
 from models.models import Park, Parkinglot, Point
@@ -48,6 +50,19 @@ def index():
 # @socket_.on('get-image')
 # def getImage():
 #     emit('get-image', 'static/img/owl1.jpg', broadcast = True)
+
+@app.route("/uploadImage", methods=['POST'])    
+def getImage():
+	image = request.data
+	nparr = np.fromstring(image, np.uint8)
+	img_np = cv2.imdecode(nparr,cv2.IMREAD_COLOR) # cv2.IMREAD_COLOR in OpenCV 3.1
+
+	print("received image ")
+	asd = cv2.imshow('frame',img_np)
+	cv2.waitKey()
+	# print(image)
+	return "got image"
+
 
 if __name__ == "__main__":
     app.config['SESSION_TYPE'] = 'filesystem'
