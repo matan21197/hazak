@@ -1,0 +1,28 @@
+{
+    "parking-lots":[
+        {
+            "id": "12af-5ec6-90a3", 
+            "name": "microsoft",
+            "description": "microsoft",
+            "location": "microsoft",
+            "img": "",
+            "point1": {
+                "x": 0,
+                "y": 0
+            }, "point2": {
+
+                "x": 12.5,
+                "y": 0
+            }, "point3": {
+
+                "x": 0,
+                "y": 16
+            },"point4": {
+
+                "x": 12.5,
+                "y": 16
+            },
+            "parks" : []
+        }
+    ]
+}
