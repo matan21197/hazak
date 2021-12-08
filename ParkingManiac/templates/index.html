@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Canvas Free HTML5 Responsive Template | Template Stock</title>
+    <title>Parking Maniac</title>
 
     <!-- =============== Bootstrap Core CSS =============== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
@@ -118,7 +118,7 @@
                             <a class="page-scroll" href="#how-it-works">How it works</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#Screenshots">Screenshots</a>
+                            <a class="page-scroll" href="#Screenshots">Parking Status</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#Price">Price</a>
@@ -163,7 +163,7 @@
             <span class="angle"></span>
             <div class="row">
                 <div class="col-xs-12 col-sm-5 col-md-3 wow fadeInLeft animated" data-wow-delay=".5s">
-                    <h1><span>HEY THERE!</span> WELCOME TO OUR SITE</h2>
+                    <h1><span>HEY THERE!</span> WELCOME TO THE FUTURE</h2>
                 </div>
                 <div class="col-xs-12 col-sm-7 col-md-9 wow fadeInRight animated" data-wow-delay=".5s">
                     <h2>Start Bootstrap has everything you need to get your</h2>
@@ -275,77 +275,11 @@
         <div class="container">
             <span class="angle2"></span>
             <span class="angle"></span>
-            <div class="row">
+            <div class="row ">
 
-                <div class="col-xs-12 col-sm-12 col-md-12 wow bounceIn animated headding" data-wow-delay=".1s">
-                    <h2>Screen <span>Shots</span></h2>
-                </div>
-
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 wow zoomIn animated textright" data-wow-delay=".1s">
-                            <div class="span12">
-
-                                <div id="owl-demo" class="owl-carousel">
-                                    <div class="item">
-                                        <div class="imghover" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
-                                            <!-- <img src=" static/img/owl1.jpg " alt="Owl Image "> -->
-                                            <!-- <img id="parking_img" alt="Owl Image "> -->
-                                            <!-- <! -- <canvas id="parking_img" alt="Owl canvas ">-->-->
-                                            <canvas id="my_canvas"></canvas>
-                                            <img style='display:none;' id='img' />
-                                            <div class="hover-bg "><i class="fa fa-camera camera "></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="item ">
-                                        <div class="imghover " data-toggle="modal " data-target="#exampleModa2 " data-whatever="@mdo ">
-                                            <img src="static/img/owl2.jpg " alt="Owl Image ">
-                                            <div class="hover-bg "><i class="fa fa-camera camera "></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="item ">
-                                        <div class="imghover " data-toggle="modal " data-target="#exampleModa3 " data-whatever="@mdo ">
-                                            <img src="static/img/owl3.jpg " alt="Owl Image ">
-                                            <div class="hover-bg "><i class="fa fa-camera camera "></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="item ">
-                                        <div class="imghover " data-toggle="modal " data-target="#exampleModa4 " data-whatever="@mdo ">
-                                            <img src="static/img/owl4.jpg " alt="Owl Image ">
-                                            <div class="hover-bg "><i class="fa fa-camera camera "></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <!-- =============== popup large image =============== -->
-                        <div class="modal fade " id="exampleModal " tabindex="-1 " role="dialog " aria-labelledby="exampleModalLabel ">
-                            <div class="modal-dialog " role="document ">
-                                <img src="static/img/owl1.jpg " alt="Owl Image ">
-                            </div>
-                        </div>
-
-                        <div class="modal fade " id="exampleModa2 " tabindex="-1 " role="dialog " aria-labelledby="exampleModalLabe2 ">
-                            <div class="modal-dialog " role="document ">
-                                <img src="static/img/owl2.jpg " alt="Owl Image ">
-                            </div>
-                        </div>
-
-                        <div class="modal fade " id="exampleModa3 " tabindex="-1 " role="dialog " aria-labelledby="exampleModalLabe3 ">
-                            <div class="modal-dialog " role="document ">
-                                <img src="static/img/owl3.jpg " alt="Owl Image ">
-                            </div>
-                        </div>
-
-                        <div class="modal fade " id="exampleModa4 " tabindex="-1 " role="dialog " aria-labelledby="exampleModalLabe4 ">
-                            <div class="modal-dialog " role="document ">
-                                <img src="static/img/owl4.jpg " alt="Owl Image ">
-                            </div>
-                        </div>
-                        <!-- =============== popup large image end =============== -->
-                    </div>
-
+                <div class="col-xs-12 col-sm-12 col-md-12 wow zoomIn animated headding " data-wow-delay=".1s ">
+                    <h2>Parking <span>Status</span></h2>
+                    <canvas id="myCanvas" width="100%" height="100%" style="border:1px solid #000000; position: relative !important; background-size: 100% 100%;"></canvas>
                 </div>
             </div>
         </div>
@@ -545,6 +479,7 @@
                 </div>
             </div>
         </div>
+        <img id="imgalign" hidden="true" src=""/>
         <!-- =============== container end =============== -->
     </footer>
     <!-- =============== jQuery =============== -->
@@ -561,6 +496,32 @@
     <script src="static/owl-carousel/owl.carousel.js "></script>
     <script>
         $(document).ready(function() {
+            setInterval(function(){ 
+                var canvas = document.getElementById('myCanvas')
+                var ctx = canvas.getContext('2d');
+
+                var img = new Image();
+                img.src = 'http://localhost:5000/i';//URL hosted on Flask
+
+                img.onload = function() {
+                    //img.style.display = 'none'; //I don't know
+                    console.log('WxH: ' + img.width + 'x' + img.height)
+
+                    ctx.drawImage(img, 0, 0);
+                    // var imageData = ctx.getImageData(0, 0, img.width*2, img.height*2)
+
+                    // for(x = 0 ; x < 100 ; x += 10) {
+                    //     for(y = 0 ; y < 100 ; y += 10) {
+                    //         ctx.putImageData(imageData, x, y);
+                    //     }
+                    // }
+                };    
+            }, 3000);
+        });
+    </script>
+    
+    <!-- <script>
+        $(document).ready(function() {
             $("#owl-demo ").owlCarousel({
                 autoPlay: 3000,
                 items: 3,
@@ -569,7 +530,7 @@
             });
 
         });
-    </script>
+    </script> -->
 </body>
 
 </html>
