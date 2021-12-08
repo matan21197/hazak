@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, copy_current_request_context, redirect, url_for, make_response, send_file
+from flask import Flask, render_template,request, session, copy_current_request_context, redirect, url_for, make_response, send_file
 from datetime import timedelta, date
 import os
 from threading import Lock
@@ -6,6 +6,7 @@ import datetime
 import json
 import cv2
 import numpy as np
+from image_utils import process_image
 
 from models.models import db
 from models.models import Park, Parkinglot, Point
@@ -53,15 +54,17 @@ def index():
 
 @app.route("/uploadImage", methods=['POST'])    
 def getImage():
-	image = request.data
-	nparr = np.fromstring(image, np.uint8)
-	img_np = cv2.imdecode(nparr,cv2.IMREAD_COLOR) # cv2.IMREAD_COLOR in OpenCV 3.1
+    image = request.data
+    nparr = np.fromstring(image, np.uint8)
+    img_np = cv2.imdecode(nparr,cv2.IMREAD_COLOR) # cv2.IMREAD_COLOR in OpenCV 3.1
 
-	print("received image ")
-	asd = cv2.imshow('frame',img_np)
-	cv2.waitKey()
+    print("received image ")
+    processed_image = process_image(img_np)
+    
+    cv2.imshow('frame',processed_image)
+    cv2.waitKey()
 	# print(image)
-	return "got image"
+    return "got image"
 
 
 if __name__ == "__main__":
