@@ -1,4 +1,5 @@
-from flask import Flask, render_template,request, session, copy_current_request_context, redirect, url_for, make_response, send_file
+from flask import Flask, render_template, session, copy_current_request_context, redirect, url_for, make_response, \
+    send_file, request
 from datetime import timedelta, date
 import os
 from threading import Lock
@@ -6,8 +7,8 @@ import datetime
 import json
 import cv2
 import numpy as np
-from image_utils import process_image
 
+from image_utils import process_image
 from models.models import db
 from models.models import Park, Parkinglot, Point
 
@@ -38,9 +39,11 @@ with app.app_context():
 
 """
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 # @socket_.on('my_event', namespace='/test')
 # def test_message(message):
@@ -52,19 +55,70 @@ def index():
 # def getImage():
 #     emit('get-image', 'static/img/owl1.jpg', broadcast = True)
 
-@app.route("/uploadImage", methods=['POST'])    
-def getImage():
+@app.route("/uploadImage/<name>", methods=['POST'])
+def getImage(name):
     image = request.data
     nparr = np.fromstring(image, np.uint8)
-    img_np = cv2.imdecode(nparr,cv2.IMREAD_COLOR) # cv2.IMREAD_COLOR in OpenCV 3.1
+    img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)  # cv2.IMREAD_COLOR in OpenCV 3.1
 
     print("received image ")
-    processed_image = process_image(img_np)
-    
-    cv2.imshow('frame',processed_image)
+    asd = cv2.imshow('frame', img_np)
     cv2.waitKey()
-	# print(image)
+
+    parking_lot = getParkingLot('admin')
+    if parking_lot is None:
+        create_parking_lot(name, image)
+    else:
+        update_parking_lot(name, image)
+    # print(image)
     return "got image"
+
+
+@app.route("/initImage/<name>", methods=['POST'])
+def split_into_parking_spots(name):
+    #todo: admin page + update db
+    return ""
+
+@app.route("/initImage/<name>", methods=['POST'])
+def get_parkinglot(name):
+    
+
+def create_parking_lot(name, image):
+    path = save_image(image)
+    p = Parkinglot(name=name, points="", description="desc2", location="location", img=path)
+    db.session.add(p)
+    db.session.commit()
+
+# updates in the db the available parks
+def get_availables(image, name):
+    parking_lot = Parkinglot.query.filter_by(name=name).first()
+    image = parking_lot.img
+    for park in parking_lot.parks:
+        park.available = is_available(image, park.points)
+    db.session.commit()
+
+
+def is_available(image, points):
+    # todo: image is a path - need to turn into img_np
+    #processed_image = process_image(img_np, points)
+    # todo: send processed_image to the ai thing
+    return True
+
+
+def update_parking_lot(name, image):
+    get_availables(image, name)
+    parking_lot = Parkinglot.query.filter_by(name=name).first()
+    parking_lot.img = image
+    db.session.commit()
+
+# Save the image as a file and returns the path
+def save_image(image):
+    # todo
+    return "pathtosaveimage"
+
+
+def getParkingLot(name):
+    return Parkinglot.query.filter_by(name=name).first()
 
 
 if __name__ == "__main__":
