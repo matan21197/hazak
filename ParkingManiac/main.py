@@ -1,7 +1,6 @@
 from flask import Flask, render_template, session, copy_current_request_context, redirect, url_for, make_response, send_file
 from datetime import timedelta, date
 import os
-from flask_socketio import SocketIO, emit, disconnect
 from threading import Lock
 import datetime
 import json
@@ -24,10 +23,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-socket_ = SocketIO(app, async_mode=async_mode)
-thread = None
-thread_lock = Lock()
-
 """
     point = Point()
     point.init(position=1,x=1,y=1)
@@ -42,18 +37,17 @@ thread_lock = Lock()
 
 @app.route('/')
 def index():
-    return render_template('index.html', async_mode=socket_.async_mode)
+    return render_template('index.html')
 
-@socket_.on('my_event', namespace='/test')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-	#ARAD TODO: try Print
-    emit('my_response',
-         {'data': message['data'], 'count': session['receive_count'],  'parking_img': 'static/img/owl1.jpg'})
+# @socket_.on('my_event', namespace='/test')
+# def test_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     emit('my_response',
+#          {'data': message['data'], 'count': session['receive_count'],  'parking_img': 'static/img/owl1.jpg'})
 
-@socket_.on('get-image')
-def getImage():
-    emit('get-image', 'static/img/owl1.jpg', broadcast = True)
+# @socket_.on('get-image')
+# def getImage():
+#     emit('get-image', 'static/img/owl1.jpg', broadcast = True)
 
 if __name__ == "__main__":
     app.config['SESSION_TYPE'] = 'filesystem'
