@@ -8,10 +8,12 @@ from image_utils import process_image
 from models.models import db
 from models.models import Parkinglot
 
+IMAGE_DIR = os.path.abspath('./images')
 TEMPLATE_DIR = os.path.abspath('./templates')
 STATIC_DIR = os.path.abspath('./static')
 
-image_counter = 0
+IMAGE_COUNTER = [0]
+
 # app = Flask(__name__) # to make the app run without any
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
@@ -55,7 +57,7 @@ def index():
 @app.route("/uploadImage/<name>", methods=['POST'])
 def getImage(name):
     global image_counter
-    image_counter +=1
+    image_counter += 1
 
     image = request.data
     nparr = np.fromstring(image, np.uint8)
@@ -63,8 +65,8 @@ def getImage(name):
 
     print("received image ")
     save_image(img_np, name)
-    #asd = cv2.imshow('frame', img_np)
-    #cv2.waitKey()
+    # asd = cv2.imshow('frame', img_np)
+    # cv2.waitKey()
 
     parking_lot = getParkingLot('admin')
     if parking_lot is None:
@@ -120,10 +122,16 @@ def update_parking_lot(name, image):
     get_availables(image, name)
 
 
-# Save the image as a file and returns the path
-def save_image(image, name):
-    #todo
-    return "pathtosaveimage"
+"""
+This function gets an image in !! bytes !!
+and saves the image as a file and returns the path
+"""
+def save_image(image: bytes):
+    IMAGE_COUNTER[0] = IMAGE_COUNTER[0] + 1
+    path = str(IMAGE_DIR) + "\\" + str(IMAGE_COUNTER[0]) + ".jpg"
+    with open(path, "wb") as f:
+        f.write(image)
+    return path
 
 
 def getParkingLot(name):
