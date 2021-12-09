@@ -42,7 +42,7 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('beta.html')
 
 
 # @socket_.on('my_event', namespace='/test')
