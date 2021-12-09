@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request
+from datetime import datetime
+
+from flask import Flask, render_template, request, jsonify
 import os
 import cv2
 import numpy as np
 from DetectCarParking import detect_car
 
 from image_utils import process_image
-from models.models import db
+from models.models import db, Point, Park
 from models.models import Parkinglot
 
 TEMPLATE_DIR = os.path.abspath('./templates')
@@ -85,7 +87,10 @@ def split_into_parking_spots(name):
 
 @app.route("/initImage/<name>", methods=['POST'])
 def get_parkinglot(name):
-    return
+    # select from db
+    parkinglot = Parkinglot.query.filter_by(name=name).first()
+    points_array = jsonify([[point.toJSON() for point in park.points] for park in parkinglot])
+    return jsonify(img=parkinglot.img, points=points_array)
 
 
 def create_parking_lot(name, image):
@@ -108,9 +113,8 @@ def is_available(image, points):
     points = points.split("'")
     img_np = cv2.imread(image)
     processed_image = process_image(img_np, points)
-    # todo: send processed_image to the ai thing
     # Note: image should be numpy array !!!!
-    return detect_car.is_free_parking(image)
+    return detect_car.is_free_parking(processed_image)
 
 
 def update_parking_lot(name, image):
@@ -128,6 +132,25 @@ def save_image(image, name):
 
 def getParkingLot(name):
     return Parkinglot.query.filter_by(name=name).first()
+
+def randomdb():
+    point1 = Point().init(position=1, x=2, y=1)
+    point2 = Point().init(position=1, x=1, y=1)
+    point3 = Point().init(position=1, x=3, y=1)
+    point4 = Point().init(position=1, x=4, y=1)
+    point5 = Point().init(position=1, x=5, y=1)
+    point6 = Point().init(position=1, x=6, y=1)
+    point7 = Point().init(position=1, x=7, y=1)
+    point8 = Point().init(position=1, x=8, y=1)
+    points1 = [point1, point2, point3, point4]
+    points1 = [point8, point5, point6, point]
+    p = Parkinglot(name='test', description="desc2", location="yara2", img="y2")
+    park1 = Park(available=True, last_updated=datetime.now(), parkinglot=p, points=jsonify(points1))
+    park2 = Park(available=True, last_updated=datetime.now(), parkinglot=p, points=jsonify(points2))
+    db.session.add(p)
+    db.session.add(park1)
+    db.session.add(park2)
+    db.session.commit()
 
 
 if __name__ == "__main__":
