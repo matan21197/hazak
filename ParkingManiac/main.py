@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 import cv2
 import numpy as np
@@ -43,6 +43,24 @@ with app.app_context():
 def index():
     return render_template('beta.html')
 
+@app.route('/points')
+def points():
+    return jsonify([
+			{
+				"available": "true",
+				"1": {'x': 0, 'y': 0}, 
+				"2": {'x': 0, 'y': 100}, 
+				"3": {'x': 100, 'y': 100}, 
+				"4": {'x': 100, 'y': 0}
+			}, {
+				"available": "false",
+				"1": {'x': 100, 'y': 100}, 
+				"2": {'x': 100, 'y': 200}, 
+				"3": {'x': 200, 'y': 200}, 
+				"4": {'x': 200, 'y': 100}
+			}
+		]
+	)
 
 # @socket_.on('my_event', namespace='/test')
 # def test_message(message):
