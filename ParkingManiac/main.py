@@ -2,11 +2,13 @@ from flask import Flask, render_template, request
 import os
 import cv2
 import numpy as np
-from DetectCarParking import detect_car
+
+from ParkingManiac.DetectCarParking import detect_car
 
 from image_utils import process_image
 from models.models import db
 from models.models import Parkinglot
+
 
 IMAGE_DIR = os.path.abspath('./images')
 TEMPLATE_DIR = os.path.abspath('./templates')
