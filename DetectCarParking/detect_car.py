@@ -6,12 +6,11 @@ HEIGHT = 150
 LOADED_MODEL = load_model("DetectCarParking/ResNet50_model_weights.h5")
 
 """
-This function gets a path to .jpg image 
+This function gets a image as a numpy array  
 and return true if the parking in the image is free
 """
-def is_free_parking(img_file: str) -> bool:
+def is_free_parking(img) -> bool:
     class_names = ["busy", "free"]
-    img = cv.imread(img_file)
     img = cv.resize(img, (HEIGHT, HEIGHT), cv.INTER_CUBIC)
     conv = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     conv = np.expand_dims(conv, 0)

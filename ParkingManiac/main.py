@@ -7,6 +7,7 @@ import datetime
 import json
 import cv2
 import numpy as np
+from DetectCarParking import detect_car
 
 from image_utils import process_image
 from models.models import db
@@ -102,7 +103,8 @@ def is_available(image, points):
     # todo: image is a path - need to turn into img_np
     #processed_image = process_image(img_np, points)
     # todo: send processed_image to the ai thing
-    return True
+    # Note: image should be numpy array !!!!
+    return detect_car.is_free_parking(image)
 
 
 def update_parking_lot(name, image):
