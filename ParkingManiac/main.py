@@ -14,8 +14,6 @@ STATIC_DIR = os.path.abspath('./static')
 
 image_counter = 0
 
-image_counter_for_saving = 0
-
 # app = Flask(__name__) # to make the app run without any
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
@@ -128,10 +126,8 @@ def update_parking_lot(name, image):
 This function gets an image in !! bytes !!
 and saves the image as a file and returns the path
 """
-def save_image(image: bytes):
-    global image_counter_for_saving
-    image_counter_for_saving = image_counter_for_saving + 1
-    path = str(IMAGE_DIR) + "\\" + str(image_counter_for_saving) + ".jpg"
+def save_image(image: bytes, name: str):
+    path = str(IMAGE_DIR) + "\\" + str(image_counter) + "_" + str(name) + ".jpg"
     with open(path, "wb") as f:
         f.write(image)
     return path
