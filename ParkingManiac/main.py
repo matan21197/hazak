@@ -15,6 +15,7 @@ from models.models import Park, Parkinglot, Point
 TEMPLATE_DIR = os.path.abspath('./templates')
 STATIC_DIR = os.path.abspath('./static')
 
+image_counter = 0
 # app = Flask(__name__) # to make the app run without any
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
@@ -76,18 +77,21 @@ def getImage(name):
 
 @app.route("/initImage/<name>", methods=['POST'])
 def split_into_parking_spots(name):
-    #todo: admin page + update db
+    # todo: admin page + update db
     return ""
+
 
 @app.route("/initImage/<name>", methods=['POST'])
 def get_parkinglot(name):
-    
+    return
+
 
 def create_parking_lot(name, image):
     path = save_image(image)
     p = Parkinglot(name=name, points="", description="desc2", location="location", img=path)
     db.session.add(p)
     db.session.commit()
+
 
 # updates in the db the available parks
 def get_availables(image, name):
@@ -100,16 +104,17 @@ def get_availables(image, name):
 
 def is_available(image, points):
     # todo: image is a path - need to turn into img_np
-    #processed_image = process_image(img_np, points)
+    # processed_image = process_image(img_np, points)
     # todo: send processed_image to the ai thing
     return True
 
 
 def update_parking_lot(name, image):
-    get_availables(image, name)
     parking_lot = Parkinglot.query.filter_by(name=name).first()
     parking_lot.img = image
     db.session.commit()
+    get_availables(image, name)
+
 
 # Save the image as a file and returns the path
 def save_image(image):
