@@ -112,7 +112,7 @@ def is_available(image, points):
     processed_image = process_image(img_np, points)
     # todo: send processed_image to the ai thing
     # Note: image should be numpy array !!!!
-    return detect_car.is_free_parking(image)
+    return detect_car.is_free_parking(processed_image)
 
 
 def update_parking_lot(name, image):
