@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from flask import Flask, render_template, request, jsonify
 import os
 import cv2
@@ -7,9 +6,12 @@ import numpy as np
 #from DetectCarParking import detect_car
 import json
 
+from ParkingManiac.DetectCarParking import detect_car
+
 from image_utils import process_image
 from models.models import db, Point, Park
 from models.models import Parkinglot
+
 
 IMAGE_DIR = os.path.abspath('./images')
 TEMPLATE_DIR = os.path.abspath('./templates')
@@ -48,6 +50,24 @@ def index():
     randomdb()
     return render_template('beta.html')
 
+@app.route('/points')
+def points():
+    return jsonify([
+			{
+				"available": "true",
+				"1": {'x': 0, 'y': 0}, 
+				"2": {'x': 0, 'y': 100}, 
+				"3": {'x': 100, 'y': 100}, 
+				"4": {'x': 100, 'y': 0}
+			}, {
+				"available": "false",
+				"1": {'x': 100, 'y': 100}, 
+				"2": {'x': 100, 'y': 200}, 
+				"3": {'x': 200, 'y': 200}, 
+				"4": {'x': 200, 'y': 100}
+			}
+		]
+	)
 
 # @socket_.on('my_event', namespace='/test')
 # def test_message(message):
@@ -130,7 +150,9 @@ def is_available(image, points):
     img_np = cv2.imread(image)
     processed_image = process_image(img_np, points)
     # Note: image should be numpy array !!!!
-    return True# detect_car.is_free_parking(processed_image)
+
+    return detect_car.is_free_parking(processed_image)
+
 
 
 def update_parking_lot(name, image):

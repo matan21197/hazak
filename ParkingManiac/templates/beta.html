@@ -1,17 +1,122 @@
 <!DOCTYPE html>
 <html>
-<body>
+    <head>
+        <title></title>
+        <link rel="icon" type="image/png" href="static/img/logo-img.png">
+        <style type="text/css">
+            html, body {
+                overflow: hidden;
+                height: 100%;
+                padding: 0;
+                margin: 0;
 
-<h1>Hello World!</h1>
-<button type="button" onclick="myFunction()">Set background image</button>
+                /* Center and scale the image nicely */
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            #canvas {
+                position:fixed;
+                left:0;
+                top:0;
+                width:100%;
+                height:100%;
+            }
+
+            #title {
+                position: fixed;
+                background-color: white;
+            }
+
+            #title img {
+                float:left;
+                width: 100px;
+            }
+
+            #title h1 {
+                float:left;
+            }
+        </style>
+    </head>
+<div>
+
+    <div id="title">
+        <img src="static/img/logo-img.png"/>
+        <h1>
+            &nbsp;Parking Maniac - Find parking easily
+        </h1>
+    </div>
+<canvas id="mainCanvas"></canvas>
+
+<!-- =============== jQuery =============== -->
+<script src="static/js/jquery.js "></script>
 
 <script>
-    function changebackgroundImage(path) {
-        document.body.style.backgroundImage = `url(${path})`;        
-    }
+    $( document ).ready(function() {
+        canvas = document.getElementById("mainCanvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
 
-    changebackgroundImage('static/img/back.png');
+    var c = document.getElementById("mainCanvas");
+    var ctx = c.getContext("2d");
+
+
+    setInterval(function(){
+        $.get( "i", function( data ) {
+            document.body.style.backgroundImage = `url('${data}')`;
+
+            // var img = new Image();
+            // img.width = window.innerWidth;
+            // img.height = window.innerHeight;
+            // img.style.minWidth = window.innerWidth;
+            // img.style.minHeight = window.innerHeight;
+
+            // img.onload = function() {
+            //     ctx.drawImage(img, 0, 0);
+            // };   
+            // img.src = data
+        });
+
+        $.get( "points", function( data ) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            data.forEach(shape => {
+                ctx.beginPath();
+                ctx.strokeStyle = (shape.available == "true") ? "green" : "red";
+                ctx.lineWidth = 10;
+
+                ctx.moveTo(shape['1']['x'], shape['1']['y']);
+
+                for (let index = 2; index < 5; index++) {
+                    ctx.lineTo(shape[index]['x'], shape[index]['y']);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            });
+        });
+    }, 3000);
 </script>
+
+
+<!-- data.forEach(shape => {
+    ctx.beginPath();
+
+    ctx.strokeStyle = (shape.available) ? "green" : "red";
+
+    let point = shape.find(
+        element => element.position == 1
+    );
+    ctx.moveTo(point['x'], point['y']);
+
+    for (let index = 2; index < shape.length + 1; index++) {
+        let point = shape.find(element => element.position == index);
+        ctx.lineTo(point['x'], point['y']);
+    }
+    ctx.closePath();
+    ctx.stroke();
+}); -->
 
 </body>
 </html>

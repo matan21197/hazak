@@ -2,6 +2,7 @@ from keras.models import load_model
 import numpy as np
 import cv2 as cv
 
+
 HEIGHT = 150
 LOADED_MODEL = load_model("DetectCarParking/ResNet50_model_weights.h5")
 
