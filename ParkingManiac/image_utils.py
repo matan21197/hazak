@@ -1,3 +1,5 @@
+import json
+
 import cv2
 import numpy as np
 from models.models import Point
@@ -26,6 +28,13 @@ def process_image(frame, points):
 
 
 def json_points_to_numpy_points(points):
-    new_points = [Point().init_str(point) for point in points]
-    print(new_points)
-    return np.array([[point.x, point.y] for point in new_points])
+    points = "{" + points + "}"
+    points_json = json.loads(points)
+    a = [
+        [points_json['1']['x'], points_json['1']['y']],
+        [points_json['2']['x'], points_json['2']['y']],
+        [points_json['3']['x'], points_json['3']['y']],
+        [points_json['4']['x'], points_json['4']['y']]
+    ]
+
+    return a

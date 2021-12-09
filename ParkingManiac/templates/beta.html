@@ -62,29 +62,19 @@
     var c = document.getElementById("mainCanvas");
     var ctx = c.getContext("2d");
 
+    setInterval(function(){
+        $.get("/getParks/asdfgh/img", function( data ) {
+            document.body.style.backgroundImage = `url('${data.image}')`;
+        });
+    }, 1000);
 
     setInterval(function(){
-        $.get( "i", function( data ) {
-            document.body.style.backgroundImage = `url('${data}')`;
-
-            // var img = new Image();
-            // img.width = window.innerWidth;
-            // img.height = window.innerHeight;
-            // img.style.minWidth = window.innerWidth;
-            // img.style.minHeight = window.innerHeight;
-
-            // img.onload = function() {
-            //     ctx.drawImage(img, 0, 0);
-            // };   
-            // img.src = data
-        });
-
-        $.get( "points", function( data ) {
+        $.get( "/getParks/asdfgh/parks", function( data ) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+            data = JSON.parse(data)
             data.forEach(shape => {
                 ctx.beginPath();
-                ctx.strokeStyle = (shape.available == "true") ? "green" : "red";
+                ctx.strokeStyle = (shape.available == "True") ? "green" : "red";
                 ctx.lineWidth = 10;
 
                 ctx.moveTo(shape['1']['x'], shape['1']['y']);
